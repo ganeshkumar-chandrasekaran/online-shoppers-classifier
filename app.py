@@ -13,7 +13,6 @@ import numpy as np
 import pandas as pd
 import seaborn as sns
 import streamlit as st
-import streamlit.components.v1 as components
 from sklearn.metrics import (
     ConfusionMatrixDisplay,
     accuracy_score,
@@ -654,82 +653,6 @@ def apply_theme(mode: str, accent_name: str) -> dict:
     return accent
 
 
-def render_open_sidebar_button(mode: str, accent: dict) -> None:
-    """Themeable Streamlit-style >> control to open the sidebar (esp. on mobile)."""
-    if mode == "Dark":
-        ink = "#f8fafc"
-        btn_bg = "#2f2721"
-        btn_border = accent["primary"]
-        hover_bg = "#3a322b"
-    else:
-        ink = "#1f1724"
-        btn_bg = "#ffffff"
-        btn_border = accent["border"]
-        hover_bg = accent["soft"]
-
-    # Same visual language as Streamlit's keyboard_double_arrow_right expand control.
-    components.html(
-        f"""
-<button id="open-sidebar-btn" aria-label="Open sidebar" title="Open sidebar" style="
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  width:2.5rem;
-  height:2.5rem;
-  min-width:2.5rem;
-  min-height:2.5rem;
-  margin:0;
-  padding:0;
-  border:1px solid {btn_border};
-  border-radius:0.5rem;
-  background:{btn_bg};
-  color:{ink};
-  box-shadow:0 1px 4px rgba(15,23,42,0.16);
-  cursor:pointer;
-">
-  <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-    <path fill="{ink}" d="M6.49 17.21 11.71 12 6.49 6.79 7.91 5.38 14.53 12l-6.62 6.62-1.42-1.41z"/>
-    <path fill="{ink}" d="M12.49 17.21 17.71 12l-5.22-5.21 1.42-1.41L20.53 12l-6.62 6.62-1.42-1.41z"/>
-  </svg>
-</button>
-<script>
-(function() {{
-  function findAndClick() {{
-    const doc = window.parent.document;
-    const selectors = [
-      '[data-testid="stExpandSidebarButton"]',
-      '[data-testid="stExpandSidebarButton"] button',
-      '[data-testid="stSidebarCollapsedControl"]',
-      '[data-testid="stSidebarCollapsedControl"] button',
-      '[data-testid="collapsedControl"]',
-      '[data-testid="collapsedControl"] button',
-      'button[kind="header"]',
-    ];
-    for (const sel of selectors) {{
-      const el = doc.querySelector(sel);
-      if (el) {{ el.click(); return true; }}
-    }}
-    const buttons = Array.from(doc.querySelectorAll('button'));
-    for (const b of buttons) {{
-      const label = ((b.getAttribute('aria-label') || '') + ' ' + (b.innerText || '')).toLowerCase();
-      if (label.includes('sidebar') || label.includes('expand') || label.includes('keyboard_double_arrow_right')) {{
-        b.click();
-        return true;
-      }}
-    }}
-    return false;
-  }}
-  const btn = document.getElementById('open-sidebar-btn');
-  btn.addEventListener('mouseenter', function() {{ btn.style.background = '{hover_bg}'; }});
-  btn.addEventListener('mouseleave', function() {{ btn.style.background = '{btn_bg}'; }});
-  btn.addEventListener('click', function() {{ findAndClick(); }});
-}})();
-</script>
-""",
-        height=48,
-    )
-
-
 def main():
     st.set_page_config(
         page_title="Online Shoppers Classifier",
@@ -749,12 +672,6 @@ def main():
         st.stop()
 
     full_test = load_default_test()
-
-    # Theme defaults before controls so the mobile sidebar opener can match accent.
-    theme_mode_seed = st.session_state.get("theme_mode", "Light")
-    accent_name_seed = st.session_state.get("accent_color", "Orange")
-    accent_seed = apply_theme(theme_mode_seed, accent_name_seed)
-    render_open_sidebar_button(theme_mode_seed, accent_seed)
 
     # Theme + model on the right; title on the left
     title_col, control_col = st.columns([2.2, 1.1], gap="large")
