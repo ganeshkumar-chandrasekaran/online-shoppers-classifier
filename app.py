@@ -670,36 +670,28 @@ def render_open_sidebar_button(mode: str, accent: dict) -> None:
     # Same visual language as Streamlit's keyboard_double_arrow_right expand control.
     components.html(
         f"""
-<div style="display:flex;align-items:center;gap:0.65rem;padding:0.15rem 0;">
-  <button id="open-sidebar-btn" aria-label="Open sidebar" title="Open sidebar" style="
-    display:inline-flex;
-    align-items:center;
-    justify-content:center;
-    width:2.5rem;
-    height:2.5rem;
-    min-width:2.5rem;
-    min-height:2.5rem;
-    margin:0;
-    padding:0;
-    border:1px solid {btn_border};
-    border-radius:0.5rem;
-    background:{btn_bg};
-    color:{ink};
-    box-shadow:0 1px 4px rgba(15,23,42,0.16);
-    cursor:pointer;
-  ">
-    <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-      <path fill="{ink}" d="M6.49 17.21 11.71 12 6.49 6.79 7.91 5.38 14.53 12l-6.62 6.62-1.42-1.41z"/>
-      <path fill="{ink}" d="M12.49 17.21 17.71 12l-5.22-5.21 1.42-1.41L20.53 12l-6.62 6.62-1.42-1.41z"/>
-    </svg>
-  </button>
-  <span style="
-    color:{ink};
-    font-family:Source Sans Pro,Segoe UI,sans-serif;
-    font-size:0.95rem;
-    font-weight:600;
-  ">Open sidebar</span>
-</div>
+<button id="open-sidebar-btn" aria-label="Open sidebar" title="Open sidebar" style="
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:2.5rem;
+  height:2.5rem;
+  min-width:2.5rem;
+  min-height:2.5rem;
+  margin:0;
+  padding:0;
+  border:1px solid {btn_border};
+  border-radius:0.5rem;
+  background:{btn_bg};
+  color:{ink};
+  box-shadow:0 1px 4px rgba(15,23,42,0.16);
+  cursor:pointer;
+">
+  <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+    <path fill="{ink}" d="M6.49 17.21 11.71 12 6.49 6.79 7.91 5.38 14.53 12l-6.62 6.62-1.42-1.41z"/>
+    <path fill="{ink}" d="M12.49 17.21 17.71 12l-5.22-5.21 1.42-1.41L20.53 12l-6.62 6.62-1.42-1.41z"/>
+  </svg>
+</button>
 <script>
 (function() {{
   function findAndClick() {{
