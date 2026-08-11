@@ -1,0 +1,7 @@
+#!/bin/sh
+# Strip unwanted automated co-author trailers from commit messages.
+msg_file="$1"
+tmp="$(mktemp)"
+grep -viE '^[[:space:]]*Co-authored-by:[[:space:]]*.*agent@' "$msg_file" > "$tmp" || true
+awk 'BEGIN{n=0} {lines[++n]=$0} END{while(n>0 && lines[n]~/^[[:space:]]*$/) n--; for(i=1;i<=n;i++) print lines[i]}' "$tmp" > "$msg_file"
+rm -f "$tmp"

@@ -1,0 +1,11 @@
+[client]
+# Hide developer toolbar items (rerun, deploy, etc.).
+toolbarMode = "minimal"
+
+[ui]
+# Keep the top bar shell so the mobile sidebar expand control can render.
+# Toolbar clutter is still hidden via CSS in app.py (not the sidebar toggle).
+hideTopBar = false
+
+[browser]
+gatherUsageStats = false
