@@ -62,27 +62,27 @@ as the repository root so Streamlit Cloud can find `app.py` at the top level.
 
 ## d. Models used
 
-Training used an 80/20 stratified split (`random_state=42`). Metrics below are on the **held-out test set** (2,466 rows), also saved as `test_data.csv`.
+Training used an 80/20 stratified split (`random_state=42`). Metrics below are on the **held-out test set** (2,466 rows), also saved as `test_data.csv`. Models use class weighting / distance weights where helpful, and decision thresholds are tuned on a validation slice of the training data to improve F1/recall without leaking the test set.
 
 ### Comparison table
 
 | ML Model Name | Accuracy | AUC | Precision | Recall | F1 | MCC |
 |---|---:|---:|---:|---:|---:|---:|
-| Logistic Regression | 0.8812 | 0.8876 | 0.7432 | 0.3560 | 0.4814 | 0.4603 |
-| Decision Tree | 0.8824 | 0.8480 | 0.6456 | 0.5340 | 0.5845 | 0.5199 |
-| kNN | 0.8747 | 0.7998 | 0.6714 | 0.3743 | 0.4807 | 0.4389 |
-| Naive Bayes | 0.6736 | 0.7932 | 0.2937 | 0.7880 | 0.4279 | 0.3234 |
-| Random Forest (Ensemble) | 0.9015 | 0.9209 | 0.7565 | 0.5366 | 0.6279 | 0.5842 |
+| Logistic Regression | 0.8779 | 0.8962 | 0.5990 | 0.6414 | 0.6195 | 0.5473 |
+| Decision Tree | 0.8658 | 0.8863 | 0.5484 | 0.7565 | 0.6359 | 0.5670 |
+| kNN | 0.8625 | 0.8118 | 0.5616 | 0.5131 | 0.5363 | 0.4564 |
+| Naive Bayes | 0.7113 | 0.7932 | 0.3171 | 0.7487 | 0.4455 | 0.3404 |
+| Random Forest (Ensemble) | 0.8889 | 0.9255 | 0.6274 | 0.6963 | 0.6600 | 0.5950 |
 
 ### Observations
 
 | ML Model Name | Observation about model performance |
 |---|---|
-| Logistic Regression | Strong accuracy and AUC, but recall is low — many real purchases are missed. |
-| Decision Tree | Better recall than logistic regression; accuracy stays close, AUC is a bit lower. |
-| kNN | Decent accuracy, but AUC and F1 lag behind the tree-based models. |
-| Naive Bayes | Highest recall, weakest precision/accuracy — too many false purchase flags. |
-| Random Forest (Ensemble) | Best Accuracy, AUC, Precision, F1 and MCC on this dataset. |
+| Logistic Regression | Balanced class weights + tuned threshold raise purchase recall/F1 a lot vs a plain 0.5 cutoff. |
+| Decision Tree | Strongest recall among tree/linear models; accuracy dips a little versus the untuned tree. |
+| kNN | Distance-weighted neighbors improve F1/recall over uniform kNN, but still trail ensembles. |
+| Naive Bayes | High recall continues; precision/accuracy remain the weak spot even after threshold tuning. |
+| Random Forest (Ensemble) | Best AUC, F1 and MCC; much higher purchase recall than the earlier RF, with only a small accuracy trade-off. |
 | Overall Winner | Random Forest (Ensemble) |
 
 ## How to run
