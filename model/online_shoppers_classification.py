@@ -19,7 +19,7 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-from sklearn.base import BaseEstimator, ClassifierMixin, clone
+from sklearn.base import clone
 from sklearn.compose import ColumnTransformer
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
@@ -40,7 +40,14 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import LabelEncoder, OneHotEncoder, StandardScaler
 from sklearn.tree import DecisionTreeClassifier
-from sklearn.utils.validation import check_is_fitted
+
+# Ensure pickles always reference model.threshold_classifier (importable by app.py).
+import sys
+
+_ROOT = Path(__file__).resolve().parent.parent
+if str(_ROOT) not in sys.path:
+    sys.path.insert(0, str(_ROOT))
+from model.threshold_classifier import ThresholdClassifier
 
 warnings.filterwarnings("ignore")
 
@@ -88,28 +95,6 @@ NUMERIC_FEATURES = [
 CATEGORICAL_FEATURES = ["Month", "VisitorType", "Weekend"]
 TARGET_COL = "Revenue"
 FEATURE_ORDER = NUMERIC_FEATURES + CATEGORICAL_FEATURES
-
-
-class ThresholdClassifier(BaseEstimator, ClassifierMixin):
-    """Wrap any predict_proba model with a fixed decision threshold."""
-
-    def __init__(self, estimator=None, threshold: float = 0.5):
-        self.estimator = estimator
-        self.threshold = threshold
-
-    def fit(self, X, y):
-        self.estimator_ = clone(self.estimator)
-        self.estimator_.fit(X, y)
-        self.classes_ = np.asarray(self.estimator_.classes_)
-        return self
-
-    def predict_proba(self, X):
-        check_is_fitted(self, "estimator_")
-        return self.estimator_.predict_proba(X)
-
-    def predict(self, X):
-        proba = self.predict_proba(X)[:, 1]
-        return (proba >= self.threshold).astype(int)
 
 
 def make_one_hot() -> OneHotEncoder:

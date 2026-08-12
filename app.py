@@ -24,6 +24,9 @@ from sklearn.metrics import (
     roc_auc_score,
 )
 
+# Needed so joblib can unpickle ThresholdClassifier-wrapped models.
+from model.threshold_classifier import ThresholdClassifier  # noqa: F401
+
 ROOT = Path(__file__).resolve().parent
 MODEL_DIR = ROOT / "model"
 DEFAULT_TEST = ROOT / "test_data.csv"
